@@ -1,0 +1,7 @@
+{
+    "name": "karlson/php",
+    "require": {
+        "guzzlehttp/guzzle": "^7.3",
+        "voku/simple_html_dom": "^4.7"
+    }
+}
