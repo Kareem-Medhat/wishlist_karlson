@@ -1,5 +1,11 @@
 import axios from "axios";
+import yaml from "js-yaml";
 import { JSDOM } from "jsdom";
+import fs from "fs";
+import { stringify } from "querystring";
+
+let rawYaml = fs.readFileSync("../config.yml");
+let config = yaml.load(rawYaml);
 
 function numberString(num) {
   let abbrv = "th";
@@ -16,11 +22,7 @@ function numberString(num) {
 }
 
 (async () => {
-  console.log(`
-░█░█░█▀█░█▀▄░█░░░█▀▀░█▀█░█▀█░░░▀█▀░█▀▀░░░▀█▀░█░█░█▀▀░░░█▀▄░█▀▀░█▀▀░▀█▀
-░█▀▄░█▀█░█▀▄░█░░░▀▀█░█░█░█░█░░░░█░░▀▀█░░░░█░░█▀█░█▀▀░░░█▀▄░█▀▀░▀▀█░░█░
-░▀░▀░▀░▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░░░▀▀▀░▀▀▀░░░░▀░░▀░▀░▀▀▀░░░▀▀░░▀▀▀░▀▀▀░░▀░	
-	`);
+  console.log(config.header);
 
   let request = await axios.get(
     "https://store.steampowered.com/search/?filter=popularwishlist&ignore_preferences=1"
@@ -38,9 +40,5 @@ function numberString(num) {
     rank++;
   }
   let karlson = ranked.find((game) => game.name.toLowerCase() === "karlson");
-  console.log(
-    `Haven't you heard of Karlson? It's only the ${numberString(
-      karlson.rank
-    )} most wishlisted game on steam. Wishlist it now so we can get to the number 1 spot GAMERS!`
-  );
+  console.log(config.script.replace("%rank", numberString(karlson.rank)));
 })();

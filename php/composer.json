@@ -2,6 +2,7 @@
     "name": "karlson/php",
     "require": {
         "guzzlehttp/guzzle": "^7.3",
-        "voku/simple_html_dom": "^4.7"
+        "voku/simple_html_dom": "^4.7",
+        "symfony/yaml": "^5.2"
     }
 }

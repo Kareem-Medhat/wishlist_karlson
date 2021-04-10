@@ -1,11 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+import yaml
 
-print("""
-░█░█░█▀█░█▀▄░█░░░█▀▀░█▀█░█▀█░░░▀█▀░█▀▀░░░▀█▀░█░█░█▀▀░░░█▀▄░█▀▀░█▀▀░▀█▀
-░█▀▄░█▀█░█▀▄░█░░░▀▀█░█░█░█░█░░░░█░░▀▀█░░░░█░░█▀█░█▀▀░░░█▀▄░█▀▀░▀▀█░░█░
-░▀░▀░▀░▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░░░▀▀▀░▀▀▀░░░░▀░░▀░▀░▀▀▀░░░▀▀░░▀▀▀░▀▀▀░░▀░
-""")
+with open ("../config.yml", "r") as file:
+  config = yaml.safe_load(file.read())
+
+print(config.get("header"))
 
 def search_dict(iterable, func):
   for item in iterable:
@@ -44,8 +44,4 @@ if steam_request is not None:
     })
   karlson = search_dict(ranked, lambda game: game.get("name").lower() == "karlson")
 
-  print(
-    "Haven't you heard of Karlson? It's only the {} most wishlisted game on steam. Wishlist it now so we can get to the number 1 spot GAMERS!".format(
-      number_string(karlson.get("rank"))
-    )
-  )
+  print(config.get("script").replace("%rank", number_string(karlson.get("rank"))))

@@ -1,14 +1,13 @@
 <?php
 
-echo "
-░█░█░█▀█░█▀▄░█░░░█▀▀░█▀█░█▀█░░░▀█▀░█▀▀░░░▀█▀░█░█░█▀▀░░░█▀▄░█▀▀░█▀▀░▀█▀
-░█▀▄░█▀█░█▀▄░█░░░▀▀█░█░█░█░█░░░░█░░▀▀█░░░░█░░█▀█░█▀▀░░░█▀▄░█▀▀░▀▀█░░█░
-░▀░▀░▀░▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░░░▀▀▀░▀▀▀░░░░▀░░▀░▀░▀▀▀░░░▀▀░░▀▀▀░▀▀▀░░▀░	
-";
-
 // Require All Packages
 require __DIR__  . "/vendor/autoload.php";
+use Symfony\Component\Yaml\Yaml;
 use voku\helper\HtmlDomParser;
+
+$config = Yaml::parseFile("../config.yml");
+
+echo $config["header"];
 
 function numberString(int $num) {
   $abbrv = 'th';
@@ -63,7 +62,6 @@ if ($response->getStatusCode() === 200) {
   }));
   
   
-  printf("
-Haven't you heard of Karlson? It's only the %s most wishlisted game on steam. Wishlist it now so we can get to the number 1 spot GAMERS!\n",
-  numberString($karlson["rank"]));
+  echo "\n" . str_replace("%rank", numberString($karlson["rank"]), $config["script"]) . "\n";
+
 }
