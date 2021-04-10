@@ -5,7 +5,9 @@ require __DIR__  . "/vendor/autoload.php";
 use Symfony\Component\Yaml\Yaml;
 use voku\helper\HtmlDomParser;
 
-$config = Yaml::parseFile("../config.yml");
+$parentDir = dirname(__DIR__);
+
+$config = Yaml::parseFile("$parentDir/config.yml");
 
 echo $config["header"];
 

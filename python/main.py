@@ -1,8 +1,9 @@
-import requests
+import requests, yaml, os
 from bs4 import BeautifulSoup
-import yaml
 
-with open ("../config.yml", "r") as file:
+parent_dir = os.path.dirname(os.path.dirname(__file__))
+
+with open (parent_dir + "/config.yml", "r") as file:
   config = yaml.safe_load(file.read())
 
 print(config.get("header"))

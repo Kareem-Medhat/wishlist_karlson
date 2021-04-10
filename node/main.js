@@ -1,10 +1,11 @@
-import axios from "axios";
-import yaml from "js-yaml";
-import { JSDOM } from "jsdom";
-import fs from "fs";
-import { stringify } from "querystring";
+const axios = require("axios");
+const yaml = require("js-yaml");
+const { JSDOM } = require("jsdom");
+const fs = require("fs");
+const path = require("path");
 
-let rawYaml = fs.readFileSync("../config.yml");
+let parentDir = path.resolve(__dirname, "..");
+let rawYaml = fs.readFileSync(`${parentDir}/config.yml`);
 let config = yaml.load(rawYaml);
 
 function numberString(num) {
