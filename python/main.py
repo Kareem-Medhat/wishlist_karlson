@@ -1,7 +1,14 @@
-import requests, yaml, os
+import requests, yaml
+from os.path import dirname
 from bs4 import BeautifulSoup
 
-parent_dir = os.path.dirname(os.path.dirname(__file__))
+def parentDir(levels):
+    curr = dirname(__file__)
+    for i in range(levels):
+        curr = dirname(curr)
+    return curr
+
+parent_dir = parentDir(1)
 
 with open (parent_dir + "/config.yml", "r") as file:
   config = yaml.safe_load(file.read())

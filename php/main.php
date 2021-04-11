@@ -15,17 +15,6 @@ function numberString(int $num) {
   $abbrv = 'th';
   $unit = $num % 10;
   if (floor($num / 10) !== 1) {
-    /* switch ($unit) {
-      case 1:
-        $abbrv = 'st';
-        break;
-      case 2:
-        $abbrv = 'nd';
-        break;
-      case 3:
-        $abbrv = 'rd';
-        break;
-    } */
     $ranks = [1 => "st", 2 => "nd", 3 => "rd"];
     if (array_key_exists($unit, $ranks)) {
       $abbrv = $ranks[$unit];

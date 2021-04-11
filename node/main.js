@@ -29,10 +29,10 @@ function numberString(num) {
     "https://store.steampowered.com/search/?filter=popularwishlist&ignore_preferences=1"
   );
   let parser = new JSDOM(request.data).window.document;
-  let results = parser.getElementById("search_resultsRows");
+  let results = parser.querySelectorAll("#search_resultsRows > a");
   let rank = 1;
   let ranked = [];
-  for (let game of results.querySelectorAll(":scope > a")) {
+  for ( let game of results ) {
     let name = game.querySelector(".title").textContent;
     ranked.push({
       name,
