@@ -4,8 +4,25 @@
 require __DIR__  . "/vendor/autoload.php";
 use Symfony\Component\Yaml\Yaml;
 use voku\helper\HtmlDomParser;
+use GuzzleHttp\Client as HttpClient;
 
-$parentDir = dirname(__DIR__);
+/**
+ * Get parent dir by number of steps(levels)
+ *
+ * @param integer $levels
+ * @return string
+ */
+function getParentDir(int $levels) {
+	$curr = __DIR__;
+	$i = 0;
+	while ($levels > $i) {
+		$curr = dirname($curr);
+		$i++;
+	}
+	return $curr;
+}
+
+$parentDir = getParentDir(1);
 
 $config = Yaml::parseFile("$parentDir/config.yml");
 
@@ -23,7 +40,7 @@ function numberString(int $num) {
   return "$num$abbrv";
 }
 
-$client = new \GuzzleHttp\Client();
+$client = new HttpClient();
 $response = $client->request('GET', 'https://store.steampowered.com/search/?filter=popularwishlist&ignore_preferences=1');
 
 if ($response->getStatusCode() === 200) {
@@ -37,22 +54,13 @@ if ($response->getStatusCode() === 200) {
   $results = $dom->findMulti("#search_resultsRows a");
 
   $rank = 1;
-  $ranked = [];
 
   foreach ($results as $game) {
     $title = $game->findOne(".title")->text();
-    array_push($ranked, [
-      "name" => $title,
-      "rank" => $rank
-    ]);
+    if (strtolower($title) === "karlson") {
+      echo "\n" . str_replace("%rank", numberString($rank), $config["script"]) . "\n";
+      break;
+    }
     $rank++;
   }
-
-  $karlson =  current(array_filter($ranked, function($game) {
-    return strtolower($game["name"]) === "karlson";
-  }));
-  
-  
-  echo "\n" . str_replace("%rank", numberString($karlson["rank"]), $config["script"]) . "\n";
-
 }

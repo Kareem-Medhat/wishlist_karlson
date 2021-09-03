@@ -1,26 +1,21 @@
-import requests, yaml
+import requests
+import yaml
 from os.path import dirname
 from bs4 import BeautifulSoup
 
-def parentDir(levels):
+def get_parent_dir(levels):
     curr = dirname(__file__)
-    for i in range(levels):
+    for _ in range(levels):
         curr = dirname(curr)
     return curr
 
-parent_dir = parentDir(1)
+parent_dir = get_parent_dir(1)
 
 with open (parent_dir + "/config.yml", "r") as file:
   config = yaml.safe_load(file.read())
 
 print(config.get("header"))
 
-def search_dict(iterable, func):
-  for item in iterable:
-    if func(item):
-      return item
-  return None
-  
 def number_string(num):
   abbrv = "th"
   unit = num % 10
@@ -34,7 +29,7 @@ def number_string(num):
     }.get(str(unit))
     if ranks is not None:
       abbrv = ranks
-  
+
   return "{}{}".format(num, abbrv)
 
 steam_request = requests.get("https://store.steampowered.com/search/?filter=popularwishlist&ignore_preferences=1")
@@ -43,13 +38,10 @@ if steam_request is not None:
   steam_top_wishlist = steam_request.text
   html_parser = BeautifulSoup(steam_top_wishlist, "html.parser")
   results = html_parser.find(id="search_resultsRows")
-  ranked = []
+
   for (rank, game) in enumerate(results.find_all("a"), 1):
     name = game.find(class_="title").get_text()
-    ranked.append({
-      "rank": rank,
-      "name": name
-    })
-  karlson = search_dict(ranked, lambda game: game.get("name").lower() == "karlson")
+    if name.lower() == "karlson":
+      print(config.get("script").replace("%rank", number_string(rank)))
+      break
 
-  print(config.get("script").replace("%rank", number_string(karlson.get("rank"))))
